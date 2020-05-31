@@ -1,0 +1,107 @@
+.folder__item {
+  width: 100%;
+  height: 45px;
+  background-color: var(--milk);
+  border: 1px solid var(--dark);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  &:nth-child(1) {
+    margin-top: 0;
+  }
+
+  &.selected {
+    border: 2px solid var(--green);
+  }
+
+  & .edit__wrapper {
+    height: 80%;
+    position: relative;
+    width: 250px;
+
+    & input {
+      height: 100%;
+      width: 100%;
+      padding: 0 10px;
+      outline: none;
+      border: 1px solid var(--dark);
+      font-family: inherit;
+      font-size: large;
+      background-color: var(--white);
+    }
+
+    & button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      bottom: 3px;
+      padding: 2px 10px;
+      cursor: pointer;
+      border: 2px solid var(--dark);
+      color: var(--dark);
+      outline: none;
+      font-size: 0.75rem;
+      font-weight: bold;
+      background-color: transparent;
+    }
+  }
+
+  & p.folder__title {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--dark);
+  }
+
+  & ul.folder__item-control {
+    position: relative;
+    height: 100%;
+    padding: 0 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & li.control__item {
+      list-style-type: none;
+      position: relative;
+      height: 25px;
+      width: 25px;
+      margin-left: 15px;
+      cursor: pointer;
+      & svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &:nth-child(4) {
+        height: 17px;
+        width: 17px;
+        margin-left: 23px;
+        transition: all 0.3s cubic-bezier(0.57, 0.21, 0.69, 1.25);
+
+        &:hover {
+          transform: translateX(6px);
+        }
+      }
+      &.unshared svg {
+        fill: var(--dark);
+      }
+      &.shared svg {
+        animation: waveShadow 1.5s linear infinite;
+        fill: var(--green);
+      }
+      @keyframes waveShadow {
+        0% {
+          box-shadow: 0 0 5px var(--green);
+        }
+        50% {
+          box-shadow: 0 0 15px var(--green);
+        }
+        100% {
+          box-shadow: 0 0 5px var(--green);
+        }
+      }
+    }
+  }
+}

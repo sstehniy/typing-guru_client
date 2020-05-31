@@ -1,0 +1,91 @@
+{
+  "folders": [
+    {
+      "id": 111,
+      "title": "Ultimate Coding",
+      "shared": true,
+      "todos": [
+        {
+          "title": "Learn Vue",
+          "description": "Sint consectetur pariatur esse do reprehenderit est sit officia ad et consectetur elit cupidatat aute. Magna duis excepteur elit amet irure. Elit adipisicing ullamco et amet eiusmod ad mollit nostrud culpa do eiusmod aute eu. Duis adipisicing aliqua commodo non. Anim magna Lorem anim aute id laborum esse reprehenderit cupidatat labore fugiat.",
+          "id": "259df260-996e-42dd-a1c4-5b240c2efab3",
+          "checked": false
+        },
+        {
+          "title": "Buy Milk",
+          "description": "Non excepteur non qui in adipisicing fugiat nostrud. Nisi pariatur ut veniam laborum do velit consequat. Voluptate exercitation eu anim ad laborum cillum ullamco sint deserunt Lorem. Dolor anim in consectetur in nulla ex magna. Sint culpa aliqua minim nisi do duis nulla sit eu nulla qui fugiat aliquip. Adipisicing ipsum laboris laborum occaecat et consectetur minim ea duis do.",
+          "id": "33f440df-6ac6-4b42-886f-649841e61a32",
+          "checked": true
+        },
+        {
+          "title": "Call John Doe",
+          "description": "Anim duis do Lorem consectetur ut aliqua reprehenderit eiusmod laborum irure. Dolore quis cillum tempor Lorem nisi id excepteur elit est est. Velit nisi consectetur culpa sint. Commodo esse tempor ex exercitation consequat aliquip sint quis nulla labore proident minim aliquip et. Ex culpa magna labore laboris. Exercitation fugiat dolore duis irure culpa aliquip eu elit cupidatat adipisicing.",
+          "id": "ddf566f5-5fa9-464a-a7e1-8084d99bf27b",
+          "checked": false
+        },
+        {
+          "title": "Make some Tea",
+          "description": "Sit tempor exercitation Lorem sint reprehenderit commodo aute. Consectetur magna aliquip incididunt occaecat do ullamco labore adipisicing adipisicing ullamco consequat deserunt ad pariatur. Nulla magna minim adipisicing occaecat eiusmod ea ullamco nostrud amet.",
+          "id": "89a8460b-70d2-4c04-a58e-0e51ab787aec",
+          "checked": false
+        },
+        {
+          "title": "Learn DRY programming",
+          "description": "Pariatur reprehenderit voluptate et amet pariatur eiusmod elit reprehenderit eu occaecat nisi officia laboris irure. Nulla enim ipsum id nostrud. Et aute do sunt magna ullamco irure non veniam et fugiat laborum dolore. Exercitation aliquip adipisicing id qui.",
+          "id": "e118042f-7672-4c89-adc6-9d790baae424",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "id": 333,
+      "title": "Lonely Boy",
+      "shared": false,
+      "todos": [
+        {
+          "title": "Make some love",
+          "description": "Anim anim proident esse dolor ut anim. Aliqua id exercitation minim cupidatat reprehenderit voluptate voluptate quis. Voluptate non eu quis mollit ex veniam officia commodo duis laborum anim. Ad occaecat pariatur incididunt est fugiat veniam laboris ut. Dolore qui id fugiat aliqua.",
+          "id": "89a8460b-70d2-4c04-a58e-0e51ab787aec",
+          "checked": true
+        },
+        {
+          "title": "Learn DRY programming",
+          "description": "Magna mollit nisi nulla aliqua consectetur nostrud. Lorem laborum do et enim eu laboris consectetur eu tempor consequat irure. Aliquip nostrud sint aute excepteur magna aute proident esse. Lorem nostrud non nostrud culpa adipisicing eu voluptate dolore laboris sint non dolore.",
+          "id": "e118042f-7672-4c89-adc6-9d790baae424",
+          "checked": false
+        },
+        {
+          "title": "Call Lisa Bielikova",
+          "description": "Ullamco et eu dolore commodo Lorem ut nulla minim deserunt magna amet. Laborum cupidatat voluptate enim pariatur elit nostrud incididunt deserunt veniam fugiat occaecat. Ad ut eiusmod et eu ea minim. Exercitation aute elit duis magna proident reprehenderit sit qui nulla enim exercitation commodo. Proident est quis id voluptate aute ad.",
+          "id": "ddf566f5-5fa9-464a-a7e1-8084d99bf27b",
+          "checked": false
+        },
+        {
+          "title": "Learn Vue",
+          "description": "Aliquip qui sint exercitation enim pariatur commodo nulla elit. Aliqua quis minim eiusmod est aliqua velit sint ea reprehenderit. Duis eiusmod laboris nisi labore aliquip Lorem. Anim dolore occaecat velit do. Enim occaecat exercitation incididunt nulla aliqua occaecat non. Exercitation minim aliquip duis ullamco eu sunt. Mollit elit sint fugiat sunt elit enim aliquip ullamco irure.",
+          "id": "259df260-996e-42dd-a1c4-5b240c2efab3",
+          "checked": false
+        },
+        {
+          "title": "Fap Fap",
+          "description": "Amet consequat culpa cupidatat sunt id dolore cillum qui ipsum. Adipisicing commodo aliqua consectetur cillum incididunt est eu id et labore. Aliqua eiusmod commodo consectetur eu ipsum veniam esse consequat occaecat dolore. Voluptate proident adipisicing ad ex culpa excepteur qui eiusmod non ipsum commodo enim amet consequat. Velit commodo velit sint deserunt Lorem occaecat in laborum velit.",
+          "id": "33f440df-6ac6-4b42-886f-649841e61a32",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "title": "First Folder",
+      "id": "4b13091c-45b5-4cbf-87a8-224a3977f13e",
+      "shared": false,
+      "todos": [
+        {
+          "title": "First Todo",
+          "description": "",
+          "id": "cdb164a1-b19e-4bbf-b607-14d02927d141",
+          "checked": false
+        }
+      ]
+    }
+  ]
+}

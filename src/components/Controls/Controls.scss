@@ -1,0 +1,13 @@
+.controls__container {
+  width: 550px;
+  min-height: 600px;
+  max-height: 650px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  & *:not(.input) {
+    text-transform: uppercase;
+  }
+}
