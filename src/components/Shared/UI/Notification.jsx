@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
@@ -68,13 +68,20 @@ const Notification = ({
 }) => {
   const [showNotification, setShowNotification] = useState(false);
   const dispatch = useDispatch();
+  const notRef = useRef(null);
 
   useEffect(() => {
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
-      setTimeout(() => dispatch(removeNotification(id)), TIMEOUT);
+      notRef.current = setTimeout(
+        () => dispatch(removeNotification(id)),
+        TIMEOUT
+      );
     }, 5000);
+    return () => {
+      clearTimeout(notRef.current);
+    };
   }, []);
 
   const removeNotificationHandler = useCallback(id => {

@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 const SET_NOTIFICATION = "SET_NOTIFICATION";
 const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
 
@@ -33,10 +35,10 @@ export const uiReducer = (state = initState, { type, data }) => {
   }
 };
 
-export const setNotification = ({ header, body, id }) => {
+export const setNotification = ({ header, body }) => {
   return {
     type: SET_NOTIFICATION,
-    data: { header, body, id },
+    data: { header, body, id: v4() },
   };
 };
 

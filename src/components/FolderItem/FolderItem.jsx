@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./FolderItem.scss";
-import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import {
-  editFolder,
-  removeFolder,
-  setCurrFolderId,
-} from "../../reducers/collectionReducer";
+import { editFolder } from "../../reducers/collectionReducer";
+import { setNotification } from "../../reducers/uiReducer";
+
+import Skeleton from "../Shared/UI/LoadingSkeleton";
 
 import { ReactComponent as EditIcon } from "../../assets/draw.svg";
 import { ReactComponent as ShareIcon } from "../../assets/share.svg";
@@ -18,11 +16,12 @@ const FolderItem = ({
   title,
   currFolderId,
   shared = false,
-  onClick,
+  onSelect,
   onRemove,
   onShare,
 }) => {
   const [inEditMode, setInEditMode] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [currNewTitle, setCurrNewTitle] = useState(title);
   const dispatch = useDispatch();
 
@@ -40,7 +39,12 @@ const FolderItem = ({
             setInEditMode(false);
           })()
         : null
-      : console.log("no empty titles!!!");
+      : dispatch(
+          setNotification({
+            header: "Warning",
+            body: "Folder title must not be empty",
+          })
+        );
   };
 
   const toggleEditMode = () => {
@@ -50,7 +54,14 @@ const FolderItem = ({
     setCurrNewTitle(e.target.value);
   };
 
-  return (
+  const removeFolderItemHandler = () => {
+    setIsDeleting(true);
+    onRemove();
+  };
+
+  return isDeleting ? (
+    <LoadingFolderItem />
+  ) : (
     <div className={`folder__item ${currFolderId === id ? "selected" : ""}`}>
       {inEditMode ? (
         <div className="edit__wrapper">
@@ -75,10 +86,10 @@ const FolderItem = ({
         <li className="control__item" onClick={toggleEditMode}>
           <EditIcon style={{ fill: "#0B4F6C	" }} />
         </li>
-        <li className="control__item" onClick={onRemove}>
+        <li className="control__item" onClick={removeFolderItemHandler}>
           <RmIcon style={{ fill: "#92140C" }} />
         </li>
-        <li className="control__item" onClick={onClick}>
+        <li className="control__item" onClick={onSelect}>
           <ArrowIcon style={{ transform: "rotate(-90deg)", fill: "#000000" }} />
         </li>
       </ul>
@@ -86,11 +97,12 @@ const FolderItem = ({
   );
 };
 
-FolderItem.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  title: PropTypes.string.isRequired,
-  shared: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+export const LoadingFolderItem = () => {
+  return (
+    <div className="folder__item">
+      <Skeleton />
+    </div>
+  );
 };
 
 export default FolderItem;

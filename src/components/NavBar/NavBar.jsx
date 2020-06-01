@@ -1,13 +1,13 @@
 import React from "react";
 import "./NavBar.scss";
-import { useDispatch } from "react-redux";
-import { useHistory, Link, useRouteMatch } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, NavLink, useRouteMatch } from "react-router-dom";
 import { removeUser } from "../../reducers/userReducer";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const username = useSelector(({ user }) => user.data.username);
   const history = useHistory();
   const { url } = useRouteMatch();
 
@@ -20,6 +20,7 @@ const NavBar = () => {
     <div className="navbar__container">
       <h2 className="logo">Plan-It-Make-It</h2>
       <NavMenu>
+        <h2 className="username">@{username}</h2>
         <NavMenuItem text="Inbox" type="link" to={`${url}/inbox/received`} />
         <NavMenuItem text="Logout" onClick={signOutHandler} />
       </NavMenu>

@@ -10,10 +10,8 @@ const StyledApp = styled.div`
   position: relative;
   min-height: 100vh;
   width: 100vw;
-
   display: flex;
   align-items: stretch;
-
   justify-content: center;
 `;
 

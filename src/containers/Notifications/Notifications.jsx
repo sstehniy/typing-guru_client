@@ -6,10 +6,10 @@ import Notification from "../../components/Shared/UI/Notification";
 const StyledNotifications = styled.div`
   position: fixed;
   top: 100px;
-
   z-index: 1000;
   left: 0px;
 `;
+
 const Notifications = () => {
   const notifications = useSelector(({ ui }) => ui.notifications);
   return (

@@ -15,7 +15,6 @@ import {
 import { fetchUser } from "../../sevices/userService";
 import { setToken } from "../../sevices/protectedApiClient";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
-import { v4 } from "uuid";
 import Inbox from "../../components/Inbox/Inbox";
 import UserSearch from "../../components/UserSearch/UserSearch";
 
@@ -32,7 +31,6 @@ const Home = () => {
         const message = {
           header: "Warning",
           body: "Please verify your email to be able to manage todos",
-          id: v4(),
         };
         dispatch(setNotification(message));
       } else {
@@ -43,14 +41,12 @@ const Home = () => {
         localStorage.setItem("TODO_APP_USER", JSON.stringify(parsedSavedUser));
       }
       setToken(userData.token);
-
       await dispatch(initFolders(userData.id));
       dispatch(resetFoldersLoading());
     };
     initUserAndFoldersAsync();
   }, []);
 
-  console.log("match.path", match.path);
   return (
     <div className="home__container">
       <Notifications />

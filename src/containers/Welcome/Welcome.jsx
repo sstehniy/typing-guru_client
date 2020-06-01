@@ -1,14 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { createPortal } from "react-dom";
 import "./Welcome.scss";
-import {
-  Switch,
-  Route,
-  useLocation,
-  useRouteMatch,
-  useHistory,
-  Redirect,
-} from "react-router-dom";
+import { Switch, Route, useLocation, useRouteMatch } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { ThemeProvider } from "styled-components";
 import Register from "../../components/Register/Register";

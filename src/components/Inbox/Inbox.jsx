@@ -159,13 +159,22 @@ const Inbox = () => {
 // -----------------------------------------
 
 const StyledInboxSection = styled.ul`
-  margin-top: 15px;
-  width: 100%;
+  position: relative;
+  margin: 15px 0;
+  width: 95%;
+  border: 2px solid var(--jet);
   flex: 1;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
+
+  & h2 {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
 const InboxSection = ({
@@ -212,18 +221,22 @@ const InboxSection = ({
   };
   return (
     <StyledInboxSection>
-      {isLoading
-        ? [1, 2, 3, 4, 5, 6].map(n => <LoadingItem key={n} />)
-        : invitations.map(i => (
-            <InvitationItem
-              key={i.id}
-              type={type}
-              invitation={i}
-              onAccepted={() => acceptInvitationHandler(i.id)}
-              onDeclined={() => declineInvitationHandler(i.id)}
-              onCanceled={() => cancelInvitationHandler(i.id)}
-            />
-          ))}
+      {isLoading ? (
+        [1, 2, 3, 4, 5, 6].map(n => <LoadingItem key={n} />)
+      ) : invitations.length ? (
+        invitations.map(i => (
+          <InvitationItem
+            key={i.id}
+            type={type}
+            invitation={i}
+            onAccepted={() => acceptInvitationHandler(i.id)}
+            onDeclined={() => declineInvitationHandler(i.id)}
+            onCanceled={() => cancelInvitationHandler(i.id)}
+          />
+        ))
+      ) : (
+        <h2>Empty</h2>
+      )}
     </StyledInboxSection>
   );
 };

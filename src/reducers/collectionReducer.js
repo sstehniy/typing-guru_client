@@ -6,6 +6,8 @@ import {
   createFolderService,
 } from "../sevices/collectionService";
 
+import { setNotification } from "../reducers/uiReducer";
+
 const CREATE_FOLDER = "CREATE_FOLDER";
 const EDIT_FOLDER = "EDIT_FOLDER";
 const CREATE_TODO = "CREATE_TODO";
@@ -16,16 +18,19 @@ const RESET_FILTER = "RESET_FILTER";
 const REFRESH_TODOS_AFTER_DROP = "REFRESH_TODOS_AFTER_DROP";
 const REMOVE_FOLDER = "DELETE_FOLDER";
 const SET_CURR_FOLDER_ID = "SET_CURR_FOLDER";
-const INIT_FOLDERS = "INIT_FOLDERS";
+const SET_FOLDERS = "SET_FOLDERS";
 const SET_FOLDERS_LOADING = "SET_FOLDERS_LOADING";
 const RESET_FOLDERS_LOADING = "RESET_FOLDERS_LOADING";
 const SET_FOLDER_AFTER_ACCEPTING = "SET_FOLDER_AFTER_ACCEPTING";
 const REFRESH_FOLDER = "REFRESH_FOLDER";
+const SET_CREATING_FOLDER = "SET_CREATING_FOLDER";
+const RESET_CREATING_FOLDER = "RESET_CREATING_FOLDER";
 
 // const SEND_INVITATION = "SEND_INVITATION";
 
 const initState = {
   foldersLoading: false,
+  creatingFolder: false,
   currFolderId: null,
   currFilter: "all",
   folders: [],
@@ -38,14 +43,17 @@ export const collectionReducer = (state = initState, { type, data }) => {
         ...state,
         currFolderId: data.id,
       };
-    case INIT_FOLDERS:
+    case SET_FOLDERS:
       return { ...state, folders: data.folders };
     case CREATE_FOLDER:
       return {
         ...state,
         folders: [...state.folders, data.folder],
       };
-
+    case SET_CREATING_FOLDER:
+      return { ...state, creatingFolder: true };
+    case RESET_CREATING_FOLDER:
+      return { ...state, creatingFolder: false };
     case REMOVE_FOLDER:
       return {
         ...state,
@@ -145,16 +153,28 @@ export const collectionReducer = (state = initState, { type, data }) => {
 
 export const createFolder = () => {
   return async dispatch => {
-    const folder = await createFolderService({
-      title: "New Folder",
-      id: v4(),
-      shared: false,
-      todos: [],
-    });
-    dispatch({
-      type: CREATE_FOLDER,
-      data: { folder },
-    });
+    dispatch({ type: SET_CREATING_FOLDER });
+    try {
+      const folder = await createFolderService({
+        title: "New Folder",
+        id: v4(),
+        shared: false,
+        todos: [],
+      });
+      dispatch({
+        type: CREATE_FOLDER,
+        data: { folder },
+      });
+    } catch (error) {
+      dispatch(
+        setNotification({
+          header: "Error",
+          body: "Error while creating folder",
+        })
+      );
+    } finally {
+      dispatch({ type: RESET_CREATING_FOLDER });
+    }
   };
 };
 
@@ -212,7 +232,7 @@ export const initFolders = id => {
     try {
       const folders = await fetchFolders(id);
       dispatch({
-        type: INIT_FOLDERS,
+        type: SET_FOLDERS,
         data: { folders },
       });
     } catch (error) {
@@ -241,3 +261,14 @@ export const refreshSharedFolder = folder => ({
   type: REFRESH_FOLDER,
   data: { folder },
 });
+
+export const refreshFolders = () => {
+  return async (dispatch, getState) => {
+    dispatch(setCurrFolderId(null));
+    dispatch(setFoldersLoading());
+    const userId = getState().user.data.id;
+    const folders = await fetchFolders(userId);
+    dispatch({ type: SET_FOLDERS, data: { folders } });
+    dispatch(resetFoldersLoading());
+  };
+};
