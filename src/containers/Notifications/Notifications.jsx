@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Notification from "../../components/Shared/UI/Notification";
 
 const StyledNotifications = styled.div`

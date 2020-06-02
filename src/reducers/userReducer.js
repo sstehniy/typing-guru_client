@@ -1,9 +1,6 @@
 import { loginUserService, fetchUser } from "../sevices/userService";
 import { setToken } from "../sevices/protectedApiClient";
-const SET_USER = "SET_USER";
-const INIT_USER = "INIT_USER";
-const INIT_USER_FAILED = "INIT_USER_FAILED";
-const REMOVE_USER = "RESET_USER";
+import types from "./actionTypes";
 
 const initState = {
   isLoggedIn: false,
@@ -16,7 +13,7 @@ const initState = {
 
 export const userReducer = (state = initState, { type, data }) => {
   switch (type) {
-    case SET_USER:
+    case types.SET_USER:
       return {
         ...state,
         isLoggedIn: true,
@@ -27,7 +24,7 @@ export const userReducer = (state = initState, { type, data }) => {
           id: data.id,
         },
       };
-    case INIT_USER:
+    case types.INIT_USER:
       return {
         ...state,
         isLoggedIn: true,
@@ -38,9 +35,9 @@ export const userReducer = (state = initState, { type, data }) => {
           id: data.id,
         },
       };
-    case INIT_USER_FAILED:
+    case types.INIT_USER_FAILED:
       return state;
-    case REMOVE_USER:
+    case types.REMOVE_USER:
       return { ...state, isLoggedIn: false, user: {} };
     default:
       return state;
@@ -54,7 +51,7 @@ export const loginUser = creds => {
       localStorage.setItem("TODO_APP_USER", JSON.stringify(user));
       setToken(user.token);
       dispatch({
-        type: SET_USER,
+        type: types.SET_USER,
         data: { ...user },
       });
     } catch (error) {
@@ -65,14 +62,14 @@ export const loginUser = creds => {
 
 export const removeUser = () => {
   localStorage.removeItem("TODO_APP_USER");
-  return { type: REMOVE_USER };
+  return { type: types.REMOVE_USER };
 };
 
 export const initUser = () => {
   return async dispatch => {
     const data = localStorage.getItem("TODO_APP_USER");
-    if (!data) return dispatch({ type: INIT_USER_FAILED });
+    if (!data) return dispatch({ type: types.INIT_USER_FAILED });
     const parsedData = JSON.parse(data);
-    dispatch({ type: INIT_USER, data: { ...parsedData } });
+    dispatch({ type: types.INIT_USER, data: { ...parsedData } });
   };
 };

@@ -21,7 +21,7 @@ const FolderItem = ({
   onShare,
 }) => {
   const [inEditMode, setInEditMode] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpadating, setIsUpdating] = useState(false);
   const [currNewTitle, setCurrNewTitle] = useState(title);
   const dispatch = useDispatch();
 
@@ -34,9 +34,11 @@ const FolderItem = ({
   const editTitleHandler = () => {
     return currNewTitle.trim().length
       ? currNewTitle !== title
-        ? (() => {
-            dispatch(editFolder(id, currNewTitle.trim()));
+        ? (async () => {
+            setIsUpdating(true);
+            await dispatch(editFolder(id, currNewTitle.trim()));
             setInEditMode(false);
+            setIsUpdating(false);
           })()
         : null
       : dispatch(
@@ -47,19 +49,25 @@ const FolderItem = ({
         );
   };
 
+  const enterKeyPressedHandler = e => {
+    if (e.keyCode === 13) editTitleHandler();
+    else return;
+  };
+
   const toggleEditMode = () => {
     setInEditMode(prevMode => !prevMode);
   };
+
   const setCurrNewTitleHandler = e => {
     setCurrNewTitle(e.target.value);
   };
 
   const removeFolderItemHandler = () => {
-    setIsDeleting(true);
+    setIsUpdating(true);
     onRemove();
   };
 
-  return isDeleting ? (
+  return isUpadating ? (
     <LoadingFolderItem />
   ) : (
     <div className={`folder__item ${currFolderId === id ? "selected" : ""}`}>
@@ -70,6 +78,7 @@ const FolderItem = ({
             ref={editInputRef}
             autoFocus={true}
             onChange={setCurrNewTitleHandler}
+            onKeyDown={enterKeyPressedHandler}
           />
           <button onClick={editTitleHandler}>Edit</button>
         </div>

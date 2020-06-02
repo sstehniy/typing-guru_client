@@ -6,10 +6,13 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { fetchUsersByUsername } from "../../sevices/userService";
 import { sendInvitationService } from "../../sevices/invitationService";
+
+import { ReactComponent as DeclineSVG } from "../../assets/shapes-and-symbols.svg";
 import { ReactComponent as SearchSVG } from "../../assets/search.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/multimedia-option.svg";
 
 const StyledUserSearch = styled.div`
+  position: relative;
   height: 450px;
   width: 325px;
   background-color: var(--milk);
@@ -17,6 +20,16 @@ const StyledUserSearch = styled.div`
   flex-direction: column;
   align-items: center;
   border: 4px solid var(--salmon);
+
+  & #close__btn {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    top: 7px;
+    right: 7px;
+    border: none;
+    cursor: pointer;
+  }
 
   & h1 {
     text-align: center;
@@ -41,8 +54,12 @@ const UserSearch = () => {
     setInputValue(e.target.value);
   };
 
-  const backdropClickedHandler = e => {
-    if (e.target.parentNode.id === "backdrop")
+  const closeViewHandler = e => {
+    if (
+      e.target.parentNode.id === "backdrop" ||
+      e.target.parentNode.id === "close__btn" ||
+      e.target.id === "close__btn"
+    )
       history.push(`/${userData.username}/home`);
   };
 
@@ -81,9 +98,12 @@ const UserSearch = () => {
     }
   };
   return (
-    <Backdrop onClick={backdropClickedHandler}>
+    <Backdrop onClick={closeViewHandler}>
       <StyledUserSearch>
         <h1>Search Users</h1>
+        <div onClick={closeViewHandler} id="close__btn">
+          <DeclineSVG />
+        </div>
         <SearchInput
           inputValue={inputValue}
           onChange={inputChangeHandler}
@@ -103,8 +123,8 @@ const UserSearch = () => {
 const StyledSearchInput = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
-  padding: 0 10px;
+  width: 90%;
+
   & input {
     flex: 1;
     outline: none;
@@ -133,14 +153,24 @@ const SearchInput = ({
 // -----------------------------------------
 
 const StyledUserList = styled.ul`
-  margin-top: 15px;
-  width: 100%;
+  position: relative;
+  margin: 15px 0;
+  overflow-y: scroll;
+  width: 90%;
+  border: 2px solid var(--jet);
   flex: 1;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
+
+  & h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const UserList = ({ isLoading = false, users = [], onSend = () => {} }) => {

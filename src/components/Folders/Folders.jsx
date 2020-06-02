@@ -16,7 +16,6 @@ import FolderItem, { LoadingFolderItem } from "../FolderItem/FolderItem";
 
 const Folders = () => {
   const dispatch = useDispatch();
-
   const collection = useSelector(({ collection }) => collection);
   const userData = useSelector(({ user }) => user.data);
   const history = useHistory();

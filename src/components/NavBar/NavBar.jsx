@@ -22,7 +22,7 @@ const NavBar = () => {
       <NavMenu>
         <h2 className="username">@{username}</h2>
         <NavMenuItem text="Inbox" type="link" to={`${url}/inbox/received`} />
-        <NavMenuItem text="Logout" onClick={signOutHandler} />
+        <NavMenuItem text="Logout" type="button" onClick={signOutHandler} />
       </NavMenu>
     </div>
   );
@@ -32,6 +32,10 @@ const NavBar = () => {
 
 const StyledNavMenu = styled.ul`
   display: flex;
+  & h2 {
+    margin-right: 30px;
+    color: var(--jet);
+  }
 `;
 
 const NavMenu = ({ children }) => {
@@ -44,7 +48,6 @@ const StyledNavMenuItem = styled.li`
   list-style: none;
   border: 3px solid var(--jet);
   box-shadow: 5px 4px 1px var(--jet);
-
   display: flex;
   align-items: stretch;
   justify-content: stretch;
@@ -71,6 +74,7 @@ const StyledNavMenuItem = styled.li`
     color: var(--jet);
     cursor: pointer;
     padding: 3px 15px;
+    font-family: "Dosis", sans-serif;
   }
   &:hover {
     box-shadow: 0 0 0 var(--jet);

@@ -1,7 +1,5 @@
 import { v4 } from "uuid";
-
-const SET_NOTIFICATION = "SET_NOTIFICATION";
-const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
+import types from "./actionTypes";
 
 const initState = {
   notifications: [],
@@ -9,7 +7,7 @@ const initState = {
 
 export const uiReducer = (state = initState, { type, data }) => {
   switch (type) {
-    case SET_NOTIFICATION:
+    case types.SET_NOTIFICATION:
       return {
         ...state,
         notifications: [
@@ -21,7 +19,7 @@ export const uiReducer = (state = initState, { type, data }) => {
           },
         ],
       };
-    case REMOVE_NOTIFICATION:
+    case types.REMOVE_NOTIFICATION:
       return {
         ...state,
         notifications: [
@@ -37,14 +35,14 @@ export const uiReducer = (state = initState, { type, data }) => {
 
 export const setNotification = ({ header, body }) => {
   return {
-    type: SET_NOTIFICATION,
+    type: types.SET_NOTIFICATION,
     data: { header, body, id: v4() },
   };
 };
 
 export const removeNotification = id => {
   return {
-    type: REMOVE_NOTIFICATION,
+    type: types.REMOVE_NOTIFICATION,
     data: { id },
   };
 };

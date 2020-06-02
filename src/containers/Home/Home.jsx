@@ -28,11 +28,12 @@ const Home = () => {
       dispatch(setFoldersLoading());
       const fetchedUser = await fetchUser(userData.id);
       if (!fetchedUser.emailVerified) {
-        const message = {
-          header: "Warning",
-          body: "Please verify your email to be able to manage todos",
-        };
-        dispatch(setNotification(message));
+        dispatch(
+          setNotification({
+            header: "Warning",
+            body: "Please verify your email to be able to manage todos",
+          })
+        );
       } else {
         const savedUser = localStorage.getItem("TODO_APP_USER");
         const parsedSavedUser = JSON.parse(savedUser);

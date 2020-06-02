@@ -185,6 +185,7 @@ const InboxSection = ({
 }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
   const acceptInvitationHandler = async invId => {
     history.push(`/${user.username}/home`);
     await dispatch(acceptInvitation(invId));

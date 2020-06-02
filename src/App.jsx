@@ -21,9 +21,10 @@ function App() {
   const { data: userData, isLoggedIn } = user;
 
   useEffect(() => {
-    if (isLoggedIn && userData) history.push(`/${userData.username}/home`);
-    else history.push(`/welcome/register`);
-  }, []);
+    if (isLoggedIn && userData) {
+      history.push(`/${userData.username}/home`);
+    } else history.push(`/welcome/register`);
+  });
 
   return (
     <StyledApp>
