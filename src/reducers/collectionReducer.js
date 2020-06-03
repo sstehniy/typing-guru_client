@@ -4,6 +4,8 @@ import {
   deleteFolder,
   editFolderTitle,
   createFolderService,
+  patchTodosByFolderId,
+  autoRefreshFolder,
 } from "../sevices/collectionService";
 
 import { setNotification } from "../reducers/uiReducer";
@@ -15,6 +17,7 @@ const initState = {
   creatingFolder: false,
   currFolderId: null,
   currFilter: "all",
+  stateAfterUpdate: false,
   folders: [],
 };
 
@@ -106,6 +109,8 @@ export const collectionReducer = (state = initState, { type, data }) => {
         ...state,
         currFilter: "all",
       };
+    case types.PATCH_TODOS_AFTER_STATE_UPDATE:
+      return state;
     case types.REFRESH_TODOS_AFTER_DROP:
       return {
         ...state,
@@ -128,6 +133,10 @@ export const collectionReducer = (state = initState, { type, data }) => {
           f.id === data.folder.id ? data.folder : f
         ),
       };
+    case types.SET_STATE_AFTER_UPDATE:
+      return { ...state, stateAfterUpdate: true };
+    case types.RESET_STATE_AFTER_UPDATE:
+      return { ...state, stateAfterUpdate: false };
     default:
       return state;
   }
@@ -147,6 +156,13 @@ export const createFolder = () => {
         type: types.CREATE_FOLDER,
         data: { folder },
       });
+      dispatch(setCurrFolderId(folder.id));
+      dispatch(
+        setNotification({
+          header: "Congratulations",
+          body: "Successfully created folder",
+        })
+      );
     } catch (error) {
       dispatch(
         setNotification({
@@ -162,6 +178,7 @@ export const createFolder = () => {
 
 export const removeFolder = id => {
   return async dispatch => {
+    dispatch(setStateAfterUpdate());
     await deleteFolder(id);
     dispatch({
       type: types.REMOVE_FOLDER,
@@ -186,28 +203,52 @@ export const editFolder = (folderId, newTitle) => {
   };
 };
 
-export const createTodo = (title, description) => ({
-  type: types.CREATE_TODO,
-  data: {
-    title,
-    description,
-  },
-});
+export const createTodo = (title, description) => async dispatch => {
+  dispatch(setStateAfterUpdate());
+  dispatch({
+    type: types.CREATE_TODO,
+    data: {
+      title,
+      description,
+    },
+  });
+};
 
-export const toggleTodo = id => ({
-  type: types.TOGGLE_TODO,
-  data: { id },
-});
+export const toggleTodo = id => async dispatch => {
+  dispatch(setStateAfterUpdate());
+  dispatch({
+    type: types.TOGGLE_TODO,
+    data: { id },
+  });
+};
 
-export const removeTodo = id => ({
-  type: types.REMOVE_TODO,
-  data: { id },
-});
+export const removeTodo = id => async dispatch => {
+  dispatch(setStateAfterUpdate());
+  dispatch({
+    type: types.REMOVE_TODO,
+    data: { id },
+  });
+};
+export const patchTodosAfterStateUpdate = () => {
+  return async (dispatch, getState) => {
+    const state = getState();
+    const { user, collection } = state;
+    const { currFolderId } = collection;
+    const { todos } = collection.folders.find(
+      f => f.id === collection.currFolderId
+    );
+    await patchTodosByFolderId(currFolderId, todos, user.data.id);
+    dispatch({ type: types.PATCH_TODOS_AFTER_STATE_UPDATE });
+  };
+};
 
-export const refreshTodosAfterDrop = newTodos => ({
-  type: types.REFRESH_TODOS_AFTER_DROP,
-  data: { newTodos },
-});
+export const refreshTodosAfterDrop = newTodos => async dispatch => {
+  dispatch({
+    type: types.REFRESH_TODOS_AFTER_DROP,
+    data: { newTodos },
+  });
+  dispatch(setStateAfterUpdate());
+};
 
 export const initFolders = id => {
   return async dispatch => {
@@ -241,10 +282,26 @@ export const setFolderAfterAccepting = folder => ({
   data: { folder },
 });
 
-export const refreshSharedFolder = folder => ({
-  type: types.REFRESH_FOLDER,
-  data: { folder },
-});
+export const refreshSharedFolder = () => {
+  return async (dispatch, getState) => {
+    console.log("updating");
+    const { collection, user } = getState();
+    const { currFolderId } = collection;
+    const fetchedFolder = await autoRefreshFolder(currFolderId);
+    console.log(fetchedFolder.updatedBy.toString());
+    console.log("ended fetching");
+    console.log(
+      new Date().getTime() - new Date(fetchedFolder.updatedAt).getTime()
+    );
+    console.log(fetchedFolder.updatedBy.toString(), user.data.id);
+    if (fetchedFolder.updatedBy.toString() === user.data.id) {
+      console.log("not modified");
+      return dispatch({ type: "" });
+    }
+
+    dispatch({ type: types.REFRESH_FOLDER, data: { folder: fetchedFolder } });
+  };
+};
 
 export const refreshFolders = () => {
   return async (dispatch, getState) => {
@@ -256,3 +313,10 @@ export const refreshFolders = () => {
     dispatch(resetFoldersLoading());
   };
 };
+
+export const setStateAfterUpdate = () => ({
+  type: types.SET_STATE_AFTER_UPDATE,
+});
+export const resetStateAfterUpdate = () => ({
+  type: types.RESET_STATE_AFTER_UPDATE,
+});
