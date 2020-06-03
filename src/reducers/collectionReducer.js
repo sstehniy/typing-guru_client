@@ -6,7 +6,7 @@ import {
   createFolderService,
   patchTodosByFolderId,
   autoRefreshFolder,
-} from "../sevices/collectionService";
+} from "../services/collectionService";
 
 import { setNotification } from "../reducers/uiReducer";
 
@@ -284,21 +284,12 @@ export const setFolderAfterAccepting = folder => ({
 
 export const refreshSharedFolder = () => {
   return async (dispatch, getState) => {
-    console.log("updating");
     const { collection, user } = getState();
     const { currFolderId } = collection;
     const fetchedFolder = await autoRefreshFolder(currFolderId);
-    console.log(fetchedFolder.updatedBy.toString());
-    console.log("ended fetching");
-    console.log(
-      new Date().getTime() - new Date(fetchedFolder.updatedAt).getTime()
-    );
-    console.log(fetchedFolder.updatedBy.toString(), user.data.id);
     if (fetchedFolder.updatedBy.toString() === user.data.id) {
-      console.log("not modified");
       return dispatch({ type: "" });
     }
-
     dispatch({ type: types.REFRESH_FOLDER, data: { folder: fetchedFolder } });
   };
 };

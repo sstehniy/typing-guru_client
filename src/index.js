@@ -40,6 +40,6 @@ ReactDOM.render(
 /* 
   //TODO: create a refresh button on folders near 'add' button 
   //TODO: add a navbar component to display username
-  ! TODO: refactor state management(centralized action types source)
+  //! TODO: refactor state management(centralized action types source)
   ! TODO: refactor Todos List (NO SPAGETTI CODE)
 */

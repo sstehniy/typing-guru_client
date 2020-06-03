@@ -30,7 +30,6 @@ const CreateTodo = () => {
   }, []);
 
   const createTodoHandler = () => {
-    console.log(currentTodos);
     if (
       currTitleInput.trim().length &&
       currentTodos !== null &&
@@ -72,7 +71,9 @@ const CreateTodo = () => {
           mountOnEnter
           unmountOnExit
         >
-          <p className="msg__error">Please give a unique title to your new TODO</p>
+          <p className="msg__error">
+            Please give a unique title to your new TODO
+          </p>
         </CSSTransition>
       </div>
 

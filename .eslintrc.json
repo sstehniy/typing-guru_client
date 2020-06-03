@@ -19,6 +19,7 @@
   "rules": {
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "no-useless-catch": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "react-hooks/exhaustive-deps": 0
   }
 }

@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "../../reducers/uiReducer";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { fetchUsersByUsername } from "../../sevices/userService";
-import { sendInvitationService } from "../../sevices/invitationService";
+import { fetchUsersByUsername } from "../../services/userService";
+import { sendInvitationService } from "../../services/invitationService";
 
 import { ReactComponent as DeclineSVG } from "../../assets/shapes-and-symbols.svg";
 import { ReactComponent as SearchSVG } from "../../assets/search.svg";

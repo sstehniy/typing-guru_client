@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { resendVerificationEmail } from "../../sevices/userService";
+import { resendVerificationEmail } from "../../services/userService";
 import styled from "styled-components";
 import { ReactComponent as SuccessSVG } from "../../assets/success.svg";
 

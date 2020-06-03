@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { removeNotification } from "../../../reducers/uiReducer";
 import { CSSTransition } from "react-transition-group";
@@ -68,28 +68,31 @@ const Notification = ({
 }) => {
   const [showNotification, setShowNotification] = useState(false);
   const dispatch = useDispatch();
-  const notRef = useRef(null);
+  const noteTimeoutRef = useRef(null);
 
   useEffect(() => {
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
-      notRef.current = setTimeout(
+      noteTimeoutRef.current = setTimeout(
         () => dispatch(removeNotification(id)),
         TIMEOUT
       );
     }, 5000);
     return () => {
-      clearTimeout(notRef.current);
+      clearTimeout(noteTimeoutRef.current);
     };
-  }, []);
+  }, [dispatch, id]);
 
-  const removeNotificationHandler = useCallback(id => {
-    setShowNotification(false);
-    setTimeout(() => {
-      dispatch(removeNotification(id));
-    }, TIMEOUT);
-  }, []);
+  const removeNotificationHandler = useCallback(
+    id => {
+      setShowNotification(false);
+      setTimeout(() => {
+        dispatch(removeNotification(id));
+      }, TIMEOUT);
+    },
+    [dispatch]
+  );
   return (
     <CSSTransition
       in={showNotification}

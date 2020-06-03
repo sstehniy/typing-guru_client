@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { registerUserService } from "../../sevices/userService";
+import { registerUserService } from "../../services/userService";
 import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { useForm, FormContext } from "react-hook-form";
 import FormWrapper from "../Shared/Form/FormWrapper";
 import InfoMessage from "../Shared/UI/InfoMessage";
-
-import { getParentRoutePath } from "../../utils/getParentRoutePath";
 
 const { Title, SubTitle, Form, Input, Button, Footer } = FormWrapper;
 
@@ -35,8 +33,6 @@ const Register = () => {
 
   const match = useRouteMatch();
   const history = useHistory();
-  const parentRoute = getParentRoutePath(match.path);
-
   const {
     errors,
     register,
@@ -142,7 +138,7 @@ const Register = () => {
     try {
       const user = await registerUserService(credentials);
       console.log(user);
-      history.push(`${parentRoute}/registration-success/${user.id}`);
+      history.push(`${match.path}/registration-success/${user.id}`);
     } catch (error) {
       if (!error.data) return console.error(error);
       Object.keys(error.data).map(key =>
@@ -239,7 +235,7 @@ const Register = () => {
       </FormContext>
       <Footer>
         <p>
-          Have an account? <Link to={`${parentRoute}/login`}>Login</Link>
+          Have an account? <Link to={`/welcome/login`}>Login</Link>
         </p>
       </Footer>
     </FormWrapper>

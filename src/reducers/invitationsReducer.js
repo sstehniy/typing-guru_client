@@ -4,7 +4,7 @@ import {
   acceptInvitationService,
   cancelInvitationService,
   declineInvitationService,
-} from "../sevices/invitationService";
+} from "../services/invitationService";
 
 import { setNotification } from "./uiReducer";
 import {
@@ -55,7 +55,6 @@ export const acceptInvitation = id => {
   return async dispatch => {
     dispatch(setFoldersLoading());
     const folder = await acceptInvitationService(id);
-
     dispatch({ type: types.ACCEPT_INVITATION });
     dispatch(setFolderAfterAccepting(folder));
     dispatch(resetFoldersLoading());
@@ -67,19 +66,3 @@ export const acceptInvitation = id => {
     );
   };
 };
-
-//   await acceptInvitationService(invId);
-
-// } catch (error) {
-//   console.log("accaption", error);
-// }
-// dispatch(setFoldersLoading());
-// await dispatch(initFolders(user.id));
-// dispatch(resetFoldersLoading());
-// dispatch(
-//   setNotification({
-//     header: "Success!!!",
-//     body: `You can now edit the folder with your friend`,
-//     id: "kkk",
-//   })
-// );

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../reducers/userReducer";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm, FormContext } from "react-hook-form";
 import FormWrapper from "../Shared/Form/FormWrapper";
 import InfoMessage from "../Shared/UI/InfoMessage";
-
-import { getParentRoutePath } from "../../utils/getParentRoutePath";
 
 const { Title, SubTitle, Form, Input, Button, Footer } = FormWrapper;
 
@@ -19,10 +17,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const history = useHistory();
-  const match = useRouteMatch();
-  const parentRoute = getParentRoutePath(match.path);
-
-  const user = useSelector(({ user }) => user);
 
   const loginHandler = async () => {
     setIsSubmitting(true);
@@ -83,7 +77,7 @@ const Login = () => {
         <Footer>
           <p>
             Don&apos;t have an account?
-            <Link to={`${parentRoute}/register`}>Register</Link>
+            <Link to={`/welcome/register`}>Register</Link>
           </p>
         </Footer>
       </FormContext>

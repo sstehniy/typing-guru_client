@@ -11,7 +11,7 @@ import { setNotification } from "../../reducers/uiReducer";
 import {
   cancelInvitationService,
   declineInvitationService,
-} from "../../sevices/invitationService";
+} from "../../services/invitationService";
 
 import { acceptInvitation } from "../../reducers/invitationsReducer";
 

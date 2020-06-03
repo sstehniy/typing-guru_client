@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory, Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 import Home from "./containers/Home/Home";
@@ -16,21 +16,24 @@ const StyledApp = styled.div`
 `;
 
 function App() {
-  const history = useHistory();
   const user = useSelector(({ user }) => user);
   const { data: userData, isLoggedIn } = user;
 
-  useEffect(() => {
-    if (isLoggedIn && userData) {
-      history.push(`/${userData.username}/home`);
-    } else history.push(`/welcome/register`);
-  });
-
   return (
     <StyledApp>
+      <Redirect
+        exact
+        from="/"
+        to={
+          isLoggedIn && userData
+            ? `/${userData.username}/home`
+            : `/welcome/register`
+        }
+      />
       <Switch>
         <Route path={`/welcome`} component={Welcome} />
         <Route path={`/:username/home`} component={Home} />
+        <Route render={() => <h1>not found</h1>} />
       </Switch>
     </StyledApp>
   );

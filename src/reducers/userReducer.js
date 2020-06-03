@@ -1,5 +1,5 @@
-import { loginUserService, fetchUser } from "../sevices/userService";
-import { setToken } from "../sevices/protectedApiClient";
+import { loginUserService } from "../services/userService";
+import { setToken } from "../services/protectedApiClient";
 import types from "./actionTypes";
 
 const initState = {
