@@ -12,8 +12,8 @@ import {
   setFoldersLoading,
   resetFoldersLoading,
 } from "../../reducers/collectionReducer";
-import { fetchUser } from "../../sevices/userService";
-import { setToken } from "../../sevices/protectedApiClient";
+import { fetchUser } from "../../services/userService";
+import { setToken } from "../../services/protectedApiClient";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Inbox from "../../components/Inbox/Inbox";
 import UserSearch from "../../components/UserSearch/UserSearch";
