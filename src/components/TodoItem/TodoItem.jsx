@@ -15,6 +15,8 @@ const Todo = ({
   refreshStateAfterDrop,
   index,
   draggable,
+  onToggle,
+  onRemove,
 }) => {
   const [dragging, setDragging] = useState(null);
   const [dropping, setDropping] = useState(false);
@@ -24,7 +26,7 @@ const Todo = ({
 
   const { title, description, id } = todo;
 
-  const checkedClickedHandler = id => {
+  const checkedClickedHandler = () => {
     checkedBtnRef.current.className = "non-active";
 
     const btnRef = anime({
@@ -45,7 +47,7 @@ const Todo = ({
     btnRef.play();
     btnRef.finished
       .then(() => (checkedBtnRef.current.className = ""))
-      .then(() => dispatch(toggleTodo(id)));
+      .then(() => onToggle());
   };
 
   const handleDragStart = () => {
@@ -94,7 +96,7 @@ const Todo = ({
         <span onClick={() => checkedClickedHandler(id)} ref={checkedBtnRef}>
           <Check fill="green" />
         </span>
-        <span onClick={() => dispatch(removeTodo(id))}>
+        <span onClick={() => onRemove()}>
           <Delete fill="#e63946" />
         </span>
       </div>
