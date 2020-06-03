@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import TodoItem from "../../components/TodoItem/TodoItem";
 import {
   refreshTodosAfterDrop,
   setFilter,
+  patchTodosAfterStateUpdate,
+  refreshSharedFolder,
+  toggleTodo,
+  removeTodo,
+  resetStateAfterUpdate,
 } from "../../reducers/collectionReducer";
-import { patchTodosByFolderId } from "../../sevices/collectionService";
+
 import "./Todos.scss";
-import { autoRefreshFolder } from "../../sevices/collectionService";
-import { refreshSharedFolder } from "../../reducers/collectionReducer";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const StyledTodos = styled.div`
@@ -73,11 +76,12 @@ const Todos = () => {
   const intervalRef = useRef(null);
   const dispatch = useDispatch();
 
-  const { currFolderId, foldersLoading } = useSelector(
-    ({ collection }) => collection
-  );
-
-  const folders = useSelector(({ collection }) => collection.folders);
+  const {
+    currFolderId,
+    foldersLoading,
+    folders,
+    stateAfterUpdate,
+  } = useSelector(({ collection }) => collection);
 
   const currFolder = currFolderId
     ? folders.find(folder => folder.id === currFolderId)
@@ -85,19 +89,19 @@ const Todos = () => {
 
   const currFilter = useSelector(({ collection }) => collection.currFilter);
 
-  const filterTodos = useCallback(() => {
+  const filterTodos = () => {
     switch (currFilter) {
       case "all":
-        setTodosToDisplay([...todos]);
+        setTodosToDisplay(todos);
         break;
       case "todo":
-        setTodosToDisplay([...todos].filter(todo => !todo.checked));
+        setTodosToDisplay(todos.filter(todo => !todo.checked));
         break;
       case "completed":
-        setTodosToDisplay([...todos].filter(todo => todo.checked));
+        setTodosToDisplay(todos.filter(todo => todo.checked));
         break;
     }
-  });
+  };
 
   const todos = currFolder ? currFolder.todos : null;
 
@@ -105,7 +109,7 @@ const Todos = () => {
     if (folders.length && foldersLoading) {
       setFolderSelected(false);
     }
-  }, [folders]);
+  }, [folders, foldersLoading]);
 
   useEffect(() => {
     if (currFolderId) setFolderSelected(true);
@@ -121,37 +125,28 @@ const Todos = () => {
   }, [foldersLoading, folderSelected]);
 
   useEffect(() => {
-    if (!todos) return;
-    console.log("will update todos");
+    if (!todos || !stateAfterUpdate) {
+      return;
+    }
     const updateTodos = async () => {
-      await patchTodosByFolderId(currFolderId, todos);
+      await dispatch(patchTodosAfterStateUpdate());
       filterTodos();
+      dispatch(resetStateAfterUpdate());
     };
     updateTodos();
   }, [todos]);
 
   useEffect(() => {
-    if (!todos) return;
-    filterTodos();
-  }, [currFilter]);
+    if (todos) filterTodos();
+  }, [todos, currFilter]);
 
   useEffect(() => {
-    if (!todos) return;
-    filterTodos();
-  }, [todos]);
-
-  useEffect(() => console.log(isListActive), [currFolderId]);
-
-  useEffect(() => {
-    console.log("in currfolderid effect");
     clearInterval(intervalRef.current);
-    if (currFolderId && currFolder?.shared) {
-      console.log(isListActive);
-      intervalRef.current = setInterval(async () => {
-        const folder = await autoRefreshFolder(currFolderId);
-
-        dispatch(refreshSharedFolder(folder));
-      }, 20000);
+    if (currFolderId && currFolder && currFolder.shared) {
+      intervalRef.current = setInterval(
+        () => dispatch(refreshSharedFolder()),
+        5000
+      );
     }
   }, [currFolderId]);
 
@@ -205,9 +200,11 @@ const Todos = () => {
   const dragOverHandler = e => {
     e.preventDefault();
     const afterElement = getDragAfterElement(e.clientY);
-
-    // eslint-disable-next-line
-    if (afterElement?.id === memoizedId || afterElement === memoizedId) return;
+    if (
+      (afterElement && afterElement.id === memoizedId) ||
+      afterElement === memoizedId
+    )
+      return;
     setTimeout(() => {
       memoizedId = afterElement ? afterElement.id : undefined;
     }, 0);
@@ -258,6 +255,13 @@ const Todos = () => {
     }
   };
 
+  const toggleTodoHandler = id => {
+    dispatch(toggleTodo(id));
+  };
+
+  const removeTodoHandler = id => {
+    dispatch(removeTodo(id));
+  };
   return (
     <StyledTodos active={isListActive}>
       {foldersLoading && <h1 className="fallback__header">Loading...</h1>}
@@ -304,6 +308,8 @@ const Todos = () => {
                         draggable={currFilter === "all" ? true : false}
                         refreshStateAfterDrop={refreshStateAfterDrop}
                         index={i}
+                        onToggle={() => toggleTodoHandler(todo.id)}
+                        onRemove={() => removeTodoHandler(todo.id)}
                       />
                     </CSSTransition>
                   ))}
