@@ -42,7 +42,7 @@ const Welcome = () => {
                 component={Register}
               />
               <Route
-                path={`${match.path}/registration-success/:userId`}
+                path={`${match.path}/register/registration-success/:userId`}
                 exact
                 component={RegisterSuccess}
               />
