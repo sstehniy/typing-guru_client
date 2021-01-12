@@ -18,8 +18,9 @@ type ChartComponent = {
 };
 
 const defaultStyle: CSSProperties = {
-  height: 250,
-  width: 500
+  height: 400,
+  width: "55%",
+  marginBottom: 30
 };
 
 const ChartComponent = ({
@@ -36,6 +37,20 @@ const ChartComponent = ({
       data: {
         labels,
         datasets
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false
+              }
+            }
+          ]
+        }
       }
     });
     return () => {
@@ -43,14 +58,19 @@ const ChartComponent = ({
     };
   }, [chartRef, datasets, labels]);
   return (
-    <canvas
-      ref={chartRef}
-      aria-label="test_chart"
-      style={{ ...style }}
-      className={className}
-    >
-      <p>Hello Fallback World</p>
-    </canvas>
+    <div style={{ ...style }}>
+      <canvas
+        ref={chartRef}
+        aria-label="test_chart"
+        style={{
+          height: "100%",
+          width: "100%"
+        }}
+        className={className}
+      >
+        <p>Hello Fallback World</p>
+      </canvas>
+    </div>
   );
 };
 

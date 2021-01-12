@@ -54,6 +54,7 @@ const StyledTableHeaderCell = styled.div<{ flex: number; withBorder: boolean }>`
 
 const StyledTableBody = styled.div`
   width: 100%;
+  max-height: 700px;
 `;
 
 const IconWrapper = styled.span`

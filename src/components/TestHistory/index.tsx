@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable consistent-return */
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { useAuthContext } from "../../context/userContext";
@@ -10,6 +11,7 @@ import { ReactComponent as DateIcon } from "../../assets/calendar.svg";
 import { ReactComponent as SpeedIcon } from "../../assets/fast.svg";
 import { ReactComponent as AccuracyIcon } from "../../assets/seo-and-web.svg";
 import { ReactComponent as ScoreIcon } from "../../assets/ranking.svg";
+import Chart from "../Shared/Chart";
 
 const StyledTestHistory = styled.div`
   display: flex;
@@ -28,6 +30,7 @@ const TestHistory = () => {
     user ? `/api/tests/user/${user.id}` : "",
     null
   );
+  const [chartYAxis, setChartYAxis] = useState<"wpm" | "cpm" | "acc">("acc");
 
   useEffect(() => {
     if (user && location.pathname === "/history") {
@@ -95,6 +98,50 @@ const TestHistory = () => {
     }
   ];
 
+  const config = useMemo(() => {
+    if (!tests.length) return;
+    const date = new Date();
+    const labelDates = [0, 1, 2, 3, 4, 5]
+      .map((_, idx) => {
+        if (idx === 0) {
+          return new Intl.DateTimeFormat("en-GB", {
+            month: "long",
+            year: "numeric"
+          }).format(date);
+        }
+        date.setMonth(date.getMonth() - 1);
+        return new Intl.DateTimeFormat("en-GB", {
+          month: "long",
+          year: "numeric"
+        }).format(date);
+      })
+      .reverse();
+    const scoreData: number[] = labelDates.map((month, idx, arr) => {
+      const avgScore = +tests
+        .filter(
+          t =>
+            new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" }).format(
+              new Date(t.createdAt)
+            ) === month
+        )
+        .reduce((acc, curr, i) => (acc + curr[chartYAxis]) / (i + 1), 0)
+        .toFixed();
+      return avgScore;
+    });
+
+    return {
+      labels: labelDates.map(d => d.split(" ")[0]),
+      datasets: [
+        {
+          label: chartYAxis as string,
+          backgroundColor: "rgb(255, 99, 132)",
+          borderColor: "rgb(255, 99, 132)",
+          data: scoreData
+        }
+      ]
+    };
+  }, [chartYAxis, tests]);
+
   return (
     <StyledTestHistory>
       {(!user || !username) && (
@@ -113,6 +160,7 @@ const TestHistory = () => {
           <p style={{ fontSize: "calc(16px + 1vw)", marginTop: 20, marginBottom: 40 }}>
             <strong>@{user.username}</strong> typing tests history
           </p>
+          {config && <Chart config={config} />}
           <ResultTable items={tests} columns={columns} />
         </>
       )}
